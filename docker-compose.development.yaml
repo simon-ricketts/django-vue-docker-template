@@ -1,0 +1,25 @@
+version: "3.7"
+
+services:
+  web:
+    build:
+      target: django-dev
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./exampleproject:/exampleproject
+    ports:
+      - "8000:8000"
+    depends_on:
+      - vue
+
+  vue:
+    build:
+      context: .
+      target: vue-dev
+    command: npm run dev
+    volumes:
+      - ./exampleproject/frontend:/frontend
+      - /frontend/node_modules
+    ports:
+      - "8080:8080"
+    restart: on-failure

@@ -1,0 +1,32 @@
+FROM node:8-slim AS vue-dev
+RUN apt-get update && apt-get install python g++ build-essential -y
+WORKDIR /frontend
+COPY exampleproject/frontend .
+RUN npm install webpack webpack-dev-server webpack-cli -g
+RUN npm ci
+
+FROM python:3.8-slim as django-dev
+RUN apt-get update && apt-get install -y gcc
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+WORKDIR /exampleproject
+RUN pip install pipenv
+COPY Pipfile* ./
+RUN pipenv install --dev --system --ignore-pipfile --deploy
+COPY ./exampleproject .
+
+FROM vue-dev as vue-compiler
+WORKDIR /frontend
+RUN npm run build
+
+FROM django-dev as web
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+WORKDIR /exampleproject
+COPY --from=vue-compiler /frontend/webpack-stats.json ./frontend/webpack-stats.json
+COPY --from=vue-compiler /frontend/static ./frontend/static
+RUN python manage.py collectstatic --no-input
+
+FROM nginx:1.17.6-alpine
+COPY --from=web /exampleproject/static_root /var/exampleproject/static
+COPY ./nginx_static.conf /etc/nginx/conf.d/nginx.conf

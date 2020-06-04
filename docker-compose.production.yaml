@@ -1,0 +1,19 @@
+version: '3.7'
+
+services:
+  web:
+    build:
+      target: web
+    command: uwsgi --ini uwsgi.ini
+    environment:
+      - DJANGO_ENV=prod
+    volumes:
+      - ./socket:/socket
+    depends_on:
+      - static
+
+  static:
+    build: .
+    volumes:
+      - ./socket:/socket
+    restart: on-failure

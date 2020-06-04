@@ -19,7 +19,11 @@ services:
     command: npm run dev
     volumes:
       - ./exampleproject/frontend:/frontend
-      - /frontend/node_modules
+      # Prevent the host's node_modules overwriting the container's at run time
+      - node_modules:/frontend/node_modules
     ports:
       - "8080:8080"
     restart: on-failure
+
+volumes:
+  node_modules:

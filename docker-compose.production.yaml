@@ -4,6 +4,8 @@ services:
   web:
     build:
       target: web
+      args: 
+        - DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY}
     command: uwsgi --ini uwsgi.ini
     environment:
       - DJANGO_ENV=prod
@@ -13,7 +15,10 @@ services:
       - static
 
   static:
-    build: .
+    build:
+      context: .
+      args: 
+        - DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY}
     volumes:
       - ./socket:/socket
     restart: on-failure

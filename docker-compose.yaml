@@ -12,6 +12,8 @@ services:
       - postgres_data:/var/lib/postgresql/data/
   web:
     build: .
+    environment:
+      - DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY}
     volumes:
       - ./exampleproject:/exampleproject
     ports:

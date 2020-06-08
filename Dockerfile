@@ -22,6 +22,8 @@ RUN npm run build
 FROM django-dev as web
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
+ARG DJANGO_SECRET_KEY
+ENV DJANGO_SECRET_KEY $DJANGO_SECRET_KEY
 WORKDIR /exampleproject
 COPY --from=vue-compiler /frontend/webpack-stats.json ./frontend/webpack-stats.json
 COPY --from=vue-compiler /frontend/static ./frontend/static

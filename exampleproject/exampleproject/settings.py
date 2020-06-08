@@ -25,7 +25,7 @@ SECRET_KEY = '@12plm_0l_x+=@ats0=7d53y0#e&_zm9x8x%d2_!=^ikv=ma)v'
 
 if os.environ.get("DJANGO_ENV") == "prod":
     DEBUG = False
-    ALLOWED_HOSTS = ["*"] # Replace with whatever your domain is
+    ALLOWED_HOSTS = ["exampleproject.com"]
 else:
     DEBUG = True
     ALLOWED_HOSTS = ["*"]

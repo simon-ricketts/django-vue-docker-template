@@ -20,14 +20,14 @@ FRONTEND_DIR = os.path.join(BASE_DIR, 'frontend')
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '@12plm_0l_x+=@ats0=7d53y0#e&_zm9x8x%d2_!=^ikv=ma)v'
+SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
-
+if os.environ.get("DJANGO_ENV") == "prod":
+    DEBUG = False
+    ALLOWED_HOSTS = ["exampleproject.com"]
+else:
+    DEBUG = True
+    ALLOWED_HOSTS = ["*"]
 
 # Application definition
 
@@ -121,7 +121,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (os.path.join(FRONTEND_DIR, "static"),)
-STATIC_ROOT = "exampleproject/static_root/"
+STATIC_ROOT = os.path.join(BASE_DIR, "static_root")
 
 WEBPACK_LOADER = {
     'DEFAULT': {

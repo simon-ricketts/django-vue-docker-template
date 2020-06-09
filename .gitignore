@@ -3,3 +3,5 @@ bundles
 static_root
 webpack-stats.json
 db.sqlite3
+socket
+app-env

@@ -1,0 +1,24 @@
+version: '3.7'
+
+services:
+  web:
+    build:
+      target: web
+      args: 
+        - DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY}
+    command: uwsgi --ini uwsgi.ini
+    environment:
+      - DJANGO_ENV=prod
+    volumes:
+      - ./socket:/socket
+    depends_on:
+      - static
+
+  static:
+    build:
+      context: .
+      args: 
+        - DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY}
+    volumes:
+      - ./socket:/socket
+    restart: on-failure

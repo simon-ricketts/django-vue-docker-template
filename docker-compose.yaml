@@ -1,4 +1,4 @@
-version: '3'
+version: '3.7'
   
 services:
   db:
@@ -11,16 +11,14 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data/
   web:
-    build:
-      context: .
-      dockerfile: dockerfiles/django.Dockerfile
-    command: python manage.py runserver 0.0.0.0:8000
-    volumes:
-      - ./exampleproject:/exampleproject
+    build: .
+    environment:
+      - DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY}
     ports:
       - "8000:8000"
     depends_on:
       - db
+    restart: on-failure
 
 volumes:
   postgres_data:

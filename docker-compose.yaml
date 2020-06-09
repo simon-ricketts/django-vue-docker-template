@@ -14,8 +14,6 @@ services:
     build: .
     environment:
       - DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY}
-    volumes:
-      - ./exampleproject:/exampleproject
     ports:
       - "8000:8000"
     depends_on:

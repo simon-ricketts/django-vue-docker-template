@@ -3,3 +3,4 @@
 **/.mypy_cache
 **/.git
 .gitignore
+webpack-stats.json

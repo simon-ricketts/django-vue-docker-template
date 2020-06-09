@@ -18,9 +18,9 @@ services:
       target: vue-dev
     command: npm run dev
     volumes:
-      - ./exampleproject/frontend:/frontend
+      - ./exampleproject/frontend:/usr/src/app
       # Prevent the host's node_modules overwriting the container's at run time
-      - node_modules:/frontend/node_modules
+      - node_modules:/usr/src/app/node_modules
     ports:
       - "8080:8080"
     restart: on-failure

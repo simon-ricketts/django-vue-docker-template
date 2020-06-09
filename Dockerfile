@@ -1,8 +1,8 @@
 FROM node:8-slim AS vue-dev
 RUN apt-get update && apt-get install python g++ build-essential -y
-WORKDIR /frontend
-COPY exampleproject/frontend .
 RUN npm install webpack webpack-dev-server webpack-cli -g
+WORKDIR /usr/src/app
+COPY ./exampleproject/frontend/package*.json ./
 RUN npm ci
 
 FROM python:3.8-slim as django-dev
@@ -16,7 +16,8 @@ RUN pipenv install --dev --system --ignore-pipfile --deploy
 COPY ./exampleproject .
 
 FROM vue-dev as vue-compiler
-WORKDIR /frontend
+WORKDIR /usr/src/app
+COPY exampleproject/frontend .
 RUN npm run build
 
 FROM django-dev as web
@@ -25,8 +26,8 @@ ENV PYTHONUNBUFFERED 1
 ARG DJANGO_SECRET_KEY
 ENV DJANGO_SECRET_KEY $DJANGO_SECRET_KEY
 WORKDIR /exampleproject
-COPY --from=vue-compiler /frontend/webpack-stats.json ./frontend/webpack-stats.json
-COPY --from=vue-compiler /frontend/static ./frontend/static
+COPY --from=vue-compiler /usr/src/app/webpack-stats.json ./frontend/webpack-stats.json
+COPY --from=vue-compiler /usr/src/app/static ./frontend/static
 RUN python manage.py collectstatic --no-input
 
 FROM nginx:1.17.6-alpine

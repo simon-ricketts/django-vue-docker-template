@@ -1,9 +1,11 @@
 FROM node:8-slim AS vue-dev
 RUN apt-get update && apt-get install python g++ build-essential -y
 RUN npm install webpack webpack-dev-server webpack-cli -g
-WORKDIR /usr/src/app
+WORKDIR /usr/src
 COPY ./exampleproject/frontend/package*.json ./
 RUN npm ci
+ENV PATH=/usr/src/node_modules/.bin:$PATH
+WORKDIR /usr/src/app
 
 FROM python:3.8-slim as django-dev
 RUN apt-get update && apt-get install -y gcc

@@ -31,7 +31,3 @@ WORKDIR /exampleproject
 COPY --from=vue-compiler /usr/src/app/webpack-stats.json ./frontend/webpack-stats.json
 COPY --from=vue-compiler /usr/src/app/static ./frontend/static
 RUN python manage.py collectstatic --no-input
-
-FROM nginx:1.17.6-alpine
-COPY --from=web /exampleproject/static_root /var/exampleproject/static
-COPY ./nginx_static.conf /etc/nginx/conf.d/nginx.conf

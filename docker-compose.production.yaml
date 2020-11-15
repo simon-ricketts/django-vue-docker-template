@@ -11,14 +11,3 @@ services:
       - DJANGO_ENV=prod
     volumes:
       - ./socket:/socket
-    depends_on:
-      - static
-
-  static:
-    build:
-      context: .
-      args: 
-        - DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY}
-    volumes:
-      - ./socket:/socket
-    restart: on-failure
